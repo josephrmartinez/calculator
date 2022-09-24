@@ -8,6 +8,83 @@
     <title>Calculator</title>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="screen">12 + 23</div>
+        <div data-key="12" class="key CLR">CLR</div>
+        <div data-key="111" class="key divide">/</div>
+        <div data-key="106" class="key multiply">x</div>
+        <div data-key="109" class="key minus">-</div>
+        <div data-key="55" class="key seven">7</div>
+        <div data-key="56" class="key eight">8</div>
+        <div data-key="57" class="key nine">9</div>
+        <div data-key="107" class="key plus">+</div>
+        <div data-key="52" class="key four">4</div>
+        <div data-key="53" class="key five">5</div>
+        <div data-key="54" class="key six">6</div>
+        <div data-key="49" class="key one">1</div>
+        <div data-key="50" class="key two">2</div>
+        <div data-key="51" class="key three">3</div>
+        <div data-key="13" class="key equals">=</div>
+        <div data-key="48" class="key zero">0</div>
+        <div data-key="110" class="key decimal">.</div>
+    </div>
+
+  <audio data-key="12" src="sounds/clap.wav"></audio>
+  <audio data-key="111" src="sounds/hihat.wav"></audio>
+  <audio data-key="106" src="sounds/kick.wav"></audio>
+  <audio data-key="109" src="sounds/openhat.wav"></audio>
+  <audio data-key="55" src="sounds/boom.wav"></audio>
+  <audio data-key="56" src="sounds/ride.wav"></audio>
+  <audio data-key="57" src="sounds/snare.wav"></audio>
+  <audio data-key="107" src="sounds/tom.wav"></audio>
+  <audio data-key="52" src="sounds/tink.wav"></audio>
+  <audio data-key="53" src="sounds/clap.wav"></audio>
+  <audio data-key="54" src="sounds/hihat.wav"></audio>
+  <audio data-key="49" src="sounds/kick.wav"></audio>
+  <audio data-key="50" src="sounds/openhat.wav"></audio>
+  <audio data-key="51" src="sounds/boom.wav"></audio>
+  <audio data-key="13" src="sounds/ride.wav"></audio>
+  <audio data-key="48" src="sounds/snare.wav"></audio>
+  <audio data-key="110" src="sounds/tom.wav"></audio>
+  
+
+  <script>
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return;
+      e.target.classList.remove('typed');
+    }
+  
+    function playSound(e) {
+        console.log(e);
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+      if (!audio) return;
+  
+      key.classList.add('typed');
+      audio.currentTime = 0;
+      audio.play();
+    }
+  
+    function keyClicked(e) {
+      const keyCode = e.srcElement.attributes[0]['nodeValue'];
+      const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+      const key = document.querySelector(`div[data-key="${keyCode}"]`);
+      if (!audio) return;
+  
+      key.classList.add('typed');
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    const keys = Array.from(document.querySelectorAll('.key'));
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    keys.forEach(key => key.addEventListener('click', keyClicked));
+
+    window.addEventListener('keydown', playSound);
+
+
+  
+  </script>
+
 </body>
 </html>
