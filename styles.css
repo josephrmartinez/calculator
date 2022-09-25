@@ -34,6 +34,14 @@ body{
     transition: all 0.07s;
 }
 
+.key.operator{
+    background-color: rgb(255, 174, 0);
+}
+
+.key.CLR{
+    background-color: cadetblue;
+}
+
 .typed{
     transform: scale(.95);
     background-color: rgb(230, 230, 230);
@@ -46,11 +54,18 @@ body{
     border-radius: 10px;
     background-color: rgb(235, 235, 235);
     text-align: right;
-    padding: 1em;
+    padding: .3em;
     font-weight: 500;
     font-size: 25px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: rgb(45, 45, 45);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.solution{
+    font-weight: bold;
 }
 
 .plus{

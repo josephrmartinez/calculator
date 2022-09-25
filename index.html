@@ -9,24 +9,27 @@
 </head>
 <body>
     <div class="container">
-        <div class="screen">12 + 23</div>
+        <div class="screen">
+            <div class="problem"></div>
+            <div class="solution"></div>
+        </div>
         <div data-key="12" class="key CLR">CLR</div>
-        <div data-key="111" class="key divide">/</div>
-        <div data-key="106" class="key multiply">x</div>
-        <div data-key="109" class="key minus">-</div>
-        <div data-key="55" class="key seven">7</div>
-        <div data-key="56" class="key eight">8</div>
-        <div data-key="57" class="key nine">9</div>
-        <div data-key="107" class="key plus">+</div>
-        <div data-key="52" class="key four">4</div>
-        <div data-key="53" class="key five">5</div>
-        <div data-key="54" class="key six">6</div>
-        <div data-key="49" class="key one">1</div>
-        <div data-key="50" class="key two">2</div>
-        <div data-key="51" class="key three">3</div>
+        <div data-key="111" class="key divide operator"> / </div>
+        <div data-key="106" class="key multiply operator"> x </div>
+        <div data-key="109" class="key minus operator"> - </div>
+        <div data-key="55" class="key seven number">7</div>
+        <div data-key="56" class="key eight number">8</div>
+        <div data-key="57" class="key nine number">9</div>
+        <div data-key="107" class="key plus operator"> + </div>
+        <div data-key="52" class="key four number">4</div>
+        <div data-key="53" class="key five number">5</div>
+        <div data-key="54" class="key six number">6</div>
+        <div data-key="49" class="key one number">1</div>
+        <div data-key="50" class="key two number">2</div>
+        <div data-key="51" class="key three number">3</div>
         <div data-key="13" class="key equals">=</div>
-        <div data-key="48" class="key zero">0</div>
-        <div data-key="110" class="key decimal">.</div>
+        <div data-key="48" class="key zero number">0</div>
+        <div data-key="110" class="key decimal number">.</div>
     </div>
 
   <audio data-key="12" src="sounds/clap.wav"></audio>
@@ -49,6 +52,37 @@
   
 
   <script>
+
+
+    const keys = Array.from(document.querySelectorAll('.key'));
+    const numbers = document.querySelectorAll('.number');
+    const operator = document.querySelectorAll('.operator');
+    const keyCLR = document.querySelector('.CLR');
+    const keyEquals = document.querySelector('.equals');
+    const screen = document.querySelector('.screen');
+    const problem = document.querySelector('.problem');
+    const solution = document.querySelector('.solution');
+
+
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    keys.forEach(key => key.addEventListener('click', keyClicked));
+
+    numbers.forEach((num) => 
+        num.addEventListener('click', () => appendNumber(num.textContent))
+        );
+    
+    operator.forEach((oper) => 
+        oper.addEventListener('click', () => appendNumber(oper.textContent))
+    );
+
+    window.addEventListener('keydown', playSound);
+    window.addEventListener('keydown', handleKeyboardInput)
+    keyCLR.addEventListener('click', clearScreen);
+    keyEquals.addEventListener('click', operate);
+
+
+    // STYLING FUNCTIONS
+
     function removeTransition(e) {
       if (e.propertyName !== 'transform') return;
       e.target.classList.remove('typed');
@@ -76,13 +110,62 @@
       audio.play();
     }
 
-    const keys = Array.from(document.querySelectorAll('.key'));
-    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-    keys.forEach(key => key.addEventListener('click', keyClicked));
 
-    window.addEventListener('keydown', playSound);
+    // KEYBOARD SUPPORT
+    function handleKeyboardInput(e) {
+        console.log(e.key)
+        if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+        if (e.key === "+") appendNumber(e.key);
+        if (e.key === "Enter") operate();
+        } 
+    
 
 
+    // OPERATION FUNCTIONS
+
+    function appendNumber(number){
+        console.log("append called");
+        problem.textContent += number;
+    }
+
+    function operate(){
+        console.log("operate called");
+        const problemArray = Array.from(problem.textContent.split(" "));
+        console.log(problemArray);
+        if (problemArray[1] === "+") {
+            solution.textContent = add(problemArray[0], problemArray[2]);
+        } else if (problemArray[1] === "-") {
+            solution.textContent = subtract(problemArray[0], problemArray[2]);
+        } else if (problemArray[1] === "/") {
+            if (problemArray[2] === "0") {
+                solution.textContent = "nope.";
+            } else solution.textContent = divide(problemArray[0], problemArray[2]);
+        } else if (problemArray[1] === "x") {
+            solution.textContent = multiply(problemArray[0], problemArray[2]);
+        }
+    }
+
+    function add(a, b) {
+	return Number(a) + Number(b);
+    };
+
+    function subtract(a, b) {
+    return Number(a) - Number(b);
+    };
+
+    function multiply(a, b) {
+    return Number(a) * Number(b);
+    };
+
+    function divide(a, b) {
+    return Number(a) / Number(b);
+    };
+
+
+    function clearScreen(e) {
+        problem.textContent = "";
+        solution.textContent = "";
+    }
   
   </script>
 
